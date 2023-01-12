@@ -1,0 +1,237 @@
+#include<stdio.h>
+#include<stdlib.h>
+void insbeg();
+void insend();
+void insany();
+void delbeg();
+void delend();
+void delany();
+void display();
+struct Node
+{
+	int data;
+	struct Node *next;
+}*head=NULL;
+struct Node *create()
+{
+	struct Node *newnode;
+	int val;
+	newnode=(struct Node*)malloc(sizeof(struct Node));
+	printf("\nEnter a value:");
+	scanf("%d",&val);
+	newnode->data=val;
+	newnode->next=NULL;
+	return newnode;
+}
+void main()
+{
+	int ch;
+	while(1)
+	{
+		printf("\n1.Insert at begining\n2.Insert at ending\n3.Insert at anywhere\n 4.Delete at begining\n 5.Delete at ending\n6.Delete at anywhere\n 7.Display\n 8.Exit");
+		printf("\nEnter your choice:");
+		scanf("%d",&ch);
+		switch(ch)
+		{
+			case 1:insbeg();break;
+			case 2:insend();break;
+			case 3:insany();break;
+			case 4:delbeg();break;
+			case 5:delend();break;
+			case 6:delany();break;
+			case 7:display();break;
+			case 8:exit(0);
+			default:printf("\nWrong choice");
+		}
+	}
+}
+void insbeg()
+{
+	struct Node *newnode;
+	newnode=create();
+	if(head==NULL)
+	{
+		head=newnode;
+	}
+	else
+	{
+		newnode->next=head;
+		head=newnode;
+	}
+}
+void insend()
+{
+	struct Node *newnode,*temp;
+	newnode=create();
+	if(head==NULL)
+	{
+		head=newnode;
+	}
+	else
+	{
+		temp=head;
+		while(temp->next!=NULL)
+		{
+			temp=temp->next;
+		}
+		temp->next=newnode;
+	}
+}
+void insany()
+{
+	struct Node *newnode,*temp;
+	int pos,i;
+	newnode=create();
+	if(head==NULL)
+	{
+		head=newnode;
+	}
+	else
+	{
+		printf("\nEnter your position greater than zero:");
+		scanf("%d",&pos);
+		if(pos==1)
+		{
+			newnode->next=head;
+			head=newnode;
+			return;
+		}
+		else if(pos>1)
+		{
+			temp=head;
+			for(i=1;i<pos-1;i++)
+			{
+				if(temp->next==NULL)
+				{
+					temp->next=newnode;
+					return;
+				}
+				temp=temp->next;
+			}
+			newnode->next=temp->next;
+			temp->next=newnode;			
+		}
+		else
+		{
+			printf("\nEnter the position greater than zero");
+			return;
+		}
+	}
+}
+void delbeg()
+{
+	struct Node *temp;
+	if(head==NULL)
+	{
+		printf("\nDeletion is not possible,List is empty");
+		return;
+	}
+	else
+	{
+		temp=head;
+		printf("\nThe Deleted element is %d",temp->data);
+		head=head->next;
+		free(temp);
+	}
+}
+void delend()
+{
+	struct Node *temp1,*temp2;
+	if(head==NULL)
+	{
+		printf("\nDeletion is not possible,List is empty");
+		return;
+	}
+	else
+	{
+		if(head->next==NULL)
+		{
+			printf(“\n The Deleted element is %d”,head->data);
+			free(head);
+			head=NULL;
+			return;
+		}
+		else
+		{
+			temp1=head;
+			temp2=head;
+			while(temp1->next!=NULL)
+			{
+				temp2=temp1;
+				temp1=temp1->next;
+			}
+			temp2->next=NULL;
+			printf("\nThe Deleted element is %d",temp1->data);
+			free(temp1);
+		}
+	}
+}
+void delany()
+{
+	struct Node *temp1,*temp2;
+	int pos,i;
+	if(head==NULL)
+	{
+		printf("\nDeletion is not possible,List is empty");
+		return;
+	}
+	else
+	{
+		printf("\nEnter the position greater than zero:");
+		scanf("%d",&pos);
+		if(pos==1)
+		{
+			delbeg();
+			return;
+		}
+		else if(pos>1)
+		{
+			if(head->next==NULL)
+			{
+				printf("\nThe Deleted element is %d",head->data);
+				free(head);
+				head=NULL;
+				return;
+			}
+			temp1=head;
+			for(i=1;i<pos-1;i++)
+			{
+				temp1=temp1->next;
+				if(temp1->next==NULL)
+				{
+					delend();
+					return;
+				}
+			}
+			temp2=temp1->next;
+			temp1->next=temp2->next;
+			printf("\nThe Deleted element is %d",temp2->data);
+			free(temp2);
+		}
+		else
+		{
+			printf("\nEnter the position greater than zero");
+			return;
+		}
+	}
+}
+void display()
+{
+	struct Node *temp;
+	if(head==NULL)
+	{
+		printf("\nNo elements to display");
+		return;
+	}
+	else
+	{
+		temp=head;
+		printf("\nHead->");
+		while(temp!=NULL)
+		{
+			printf("%d->",temp->data);
+			temp=temp->next;
+		}
+		printf("NULL");
+	}
+}
