@@ -1,0 +1,265 @@
+#include<stdio.h>
+#include<stdlib.h>
+void insbeg();
+void insend();
+void insany();
+void delbeg();
+void delend();
+void delany();
+void display();
+struct Node
+{
+	int data;
+	struct Node *next;
+}*head=NULL;
+struct Node *create()
+{
+	struct Node *newnode;
+	int val;
+	newnode=(struct Node*)malloc(sizeof(struct Node));
+	printf("\nEnter a value:");
+	scanf("%d",&val);
+	newnode->data=val;
+	newnode->next=NULL;
+	return newnode;
+}
+void main()
+{
+	int ch;
+	while(1)
+	{
+		printf("\n1.Insert at begining\n2.Insert at ending\n3.Insert at anywhere\n4.Delete at begining\n5.Delete at ending\n6.Delete at anywhere\n7.Display\n8.Exit");
+		printf("\nEnter your choice:");
+		scanf("%d",&ch);
+		switch(ch)
+		{
+			case 1:insbeg();break;
+			case 2:insend();break;
+			case 3:insany();break;
+			case 4:delbeg();break;
+			case 5:delend();break;
+			case 6:delany();break;
+			case 7:display();break;
+			case 8:exit(0);
+			default:printf("\nWrong choice");
+		}
+	}
+}
+void insbeg()
+{
+	struct Node *newnode,*temp;
+	newnode=create();
+	if(head==NULL)
+	{
+		head=newnode;
+		newnode->next=head;
+	}
+	else
+	{
+		temp=head;
+		while(temp->next!=head)
+		{
+			temp=temp->next;
+		}
+		newnode->next=head;
+		head=newnode;
+		temp->next=head;
+	}
+}
+void insend()
+{
+	struct Node *newnode,*temp;
+	newnode=create();
+	if(head==NULL)
+	{
+		head=newnode;
+		newnode->next=head;
+	}
+	else
+	{
+		temp=head;
+		while(temp->next!=head)
+		{
+			temp=temp->next;
+		}
+		temp->next=newnode;
+		newnode->next=head;
+	}
+}
+void insany()
+{
+	struct Node *newnode,*temp;
+	int pos,i;
+	newnode=create();
+	if(head==NULL)
+	{
+		head=newnode;
+		newnode->next=head;
+	}
+	else
+	{
+		printf("\nEnter your position greater than zero:");
+		scanf("%d",&pos);
+		if(pos==1)
+		{
+			temp=head;
+			while(temp->next!=head)
+			{
+				temp=temp->next;
+			}
+			newnode->next=head;
+			head=newnode;
+			temp->next=head;
+			return;
+		}
+		else if(pos>1)
+		{
+			temp=head;
+			for(i=1;i<pos-1;i++)
+			{
+				temp=temp->next;
+				if(temp->next==head)
+				{
+					temp->next=newnode;
+					newnode->next=head;
+					return;
+				}
+			}
+			newnode->next=temp->next;
+			temp->next=newnode;			
+		}
+		else
+		{
+			printf("\nEnter the position greater than zero......");
+		}
+	}
+}
+void delbeg()
+{
+	struct Node *temp1,*temp2;
+	if(head==NULL)
+	{
+		printf("\nDeletion is not possible");
+		return;
+	}
+	else
+	{
+		printf("\nThe deleted element is %d",head->data);
+		if(head->next==head)
+		{
+			free(head);
+			head=NULL;
+			return;
+		}
+		temp1=head;
+		temp2=head;
+		while(temp1->next!=head)
+		{
+			temp1=temp1->next;
+		}
+		head=head->next;
+		temp1->next=head;
+		free(temp2);
+	}
+}
+void delend()
+{
+	struct Node *temp1,*temp2;
+	if(head==NULL)
+	{
+		printf("\nDeletion is not possible");
+		return;
+	}
+	else
+	{
+		if(head->next==head)
+		{
+			printf("\nThe deleted element is %d",head->data);
+			free(head);
+			head=NULL;
+			return;
+		}
+		else
+		{
+			temp1=head;
+			temp2=head;
+			while(temp1->next!=head)
+			{
+				temp2=temp1;
+				temp1=temp1->next;
+			}
+			temp2->next=head;
+			printf("\nThe deleted element is %d",temp1->data);
+			free(temp1);
+		}
+	}
+}
+void delany()
+{
+	struct Node *temp1,*temp2;
+	int pos,i;
+	if(head==NULL)
+	{
+		printf("\nDeletion is not possible");
+		return;
+	}
+	else
+	{
+		printf("\nEnter the position greater than zero:");
+		scanf("%d",&pos);
+		if(pos==1)
+		{
+			delbeg();
+			return;
+		}
+		else if(pos>1)
+		{
+			if(head->next==head)
+			{
+				printf("\nThe deleted element is %d",head->data);
+				free(head);
+				head=NULL;
+				return;
+			}
+			temp1=head;
+			for(i=1;i<pos-1;i++)
+			{
+				temp1=temp1->next;
+				if(temp1->next==head)
+				{
+					delend();
+					return;
+				}
+			}
+			temp2=temp1->next;
+			temp1->next=temp2->next;
+			printf("\nThe deleted element is %d",temp2->data);
+			free(temp2);
+		}
+		else
+		{
+			printf("\nEnter the position greater than zero.....");
+		}
+	}
+}
+void display()
+{
+	struct Node *temp;
+	if(head==NULL)
+	{
+		printf("\nNo elements to display");
+		return;
+	}
+	else
+	{
+		temp=head;
+		printf("\nHead->%d->",temp->data);
+		temp=temp->next;
+		while(temp!=head)
+		{
+			printf("%d->",temp->data);
+			temp=temp->next;
+		}
+		printf("Head");
+	}
+}
