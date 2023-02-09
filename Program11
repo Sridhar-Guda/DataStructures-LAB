@@ -1,0 +1,127 @@
+#include<stdio.h>
+#define size 40
+char stack[size];
+int top=-1;
+void push(char);
+char pop();
+int isOperator(char);
+int priority(char);
+void main()
+{
+	char infix[25],postfix[25],ch,x;
+	int i=0,j=0;
+	printf("\nThe supported operators are:( + - * / ^)");
+	printf("\nThe input string must be enclosed in a ()");
+	printf("\nEnter a string of infix:");
+	scanf("%s",infix);
+	ch=infix[i++];
+	while(ch!='\0')
+	{
+		if(ch=='(')
+		{
+			push(ch);
+		}
+		else if((ch>='a'&&ch<='z')||(ch>='A'&&ch<='Z'))
+		{
+			postfix[j++]=ch;
+		}
+		else if(ch==')')
+		{
+			x=pop();
+			while(x!='(')
+			{
+				postfix[j++]=x;
+				x=pop();
+			}
+		}
+		else if(isOperator(ch)==1)
+		{
+			x=pop();
+			while(x!='('&&priority(ch)<=priority(x))
+			{
+				postfix[j++]=x;
+				x=pop();
+			}
+			push(x);
+			push(ch);
+		
+		}
+		ch=infix[i++];
+	}
+	postfix[j]='\0';
+	printf("\nThe postfix/polish notation is:%s",postfix);
+}
+void push(char ch)
+{
+	if(top==size-1)
+	{
+		printf("\nStack Overflow");
+		return;
+	}
+	else
+	{
+		stack[++top]=ch;
+	}
+}
+char pop()
+{
+	char p;
+	if(top==-1)
+	{
+		printf("\nStack underflow");		
+	}
+	else
+	{
+		p=stack[top--];
+		return p;
+	}
+}
+int isOperator(char ch)
+{
+	if(ch=='^'||ch=='+'||ch=='-'||ch=='*'||ch=='/')
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+	/*
+	switch(ch)
+	{
+		case '+':
+		case '-':
+		case '*':
+		case '/':
+		case '^':return 1;break;
+		default:printf("\nThe character %c is not an operator",ch);return 0;
+	}
+	*/
+}
+int priority(char ch)
+{
+	if(ch=='^')
+	{
+		return 1;
+	}
+	if(ch=='*'||ch=='/')
+
+	{
+		return 3;
+	}
+	if(ch=='+'||ch=='-')
+	{
+		return 2;
+	}
+	/*
+	switch(ch)
+	{
+		case '^':return 1;break;
+		case '+':
+		case '-':return 2;break;
+		case '*':
+		case '/':return 3;break;
+		default:printf("\nPriority is not assigned for operator %c",ch);
+	}
+	*/
+}
