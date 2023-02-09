@@ -1,0 +1,107 @@
+#include<stdio.h>
+#include<stdlib.h>
+void dequeue();
+void enqueue();
+void display();
+struct Node
+{
+	int data;
+	struct Node *next;
+}*front=NULL,*rear=NULL;
+struct Node *create()
+{
+	struct Node *newnode;
+	int val;
+	newnode=(struct Node*)malloc(sizeof(struct Node));
+	if(newnode==NULL)
+	{
+		return NULL;
+	}
+	printf("\nEnter a value:");
+	scanf("%d",&val);
+	newnode->data=val;
+	newnode->next=NULL;
+	return newnode;
+}
+void main()
+{
+	int ch;
+	while(1)
+	{
+		printf("\n1.Enqueue\n2.Dequeue\n3.Display\n4.Exit");
+		printf("\nEnter your choice:");
+		scanf("%d",&ch);
+		switch(ch)
+		{
+			case 1:enqueue();break;
+			case 2:dequeue();break;
+			case 3:display();break;
+			case 4:exit(0);
+			default:printf("\nWrong choice");
+		}
+	}
+}
+void enqueue()
+{
+	struct Node *newnode;
+	newnode=create();
+	if(newnode==NULL)
+	{
+		printf("\nQueue is full insufficient memory");
+		return;
+	}
+	else if(rear==NULL&&front==NULL)
+	{
+		rear=newnode;
+		front=newnode;
+	}
+	else
+	{
+		rear->next=newnode;
+		rear=newnode;
+	}
+}
+void dequeue()
+{
+	struct Node *temp;
+	if(rear==NULL&&front==NULL)
+	{
+		printf("\nQueue is empty unable to perform delete operation");
+		return;
+	}
+	else if(rear==front)
+	{
+		printf("\nThe deleted element is %d",front->data);
+		free(front);
+		front=NULL;
+		rear=NULL;
+	}	
+	else
+	{
+		temp=front;
+		printf("\nThe dequeued element is %d",temp->data);
+		front=front->next;
+		temp->next=NULL;
+		free(temp);
+		temp=NULL;
+	}
+}
+void display()
+{
+	struct Node *temp;
+	if(front==NULL&&rear==NULL)
+	{
+		printf("\nList of Queue is Empty");
+	}
+	else
+	{
+		temp=front;
+		printf("\nfront->");
+		while(temp!=NULL)
+		{
+			printf("%d->",temp->data);
+			temp=temp->next;
+		}
+		printf("rear");
+	}
+}
