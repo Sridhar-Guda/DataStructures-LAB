@@ -1,0 +1,84 @@
+#include<stdio.h>
+#define size 50
+int stack[size],top=-1;
+void push(int);
+char pop();
+int isOperator(char);
+int calc(char,int,int);
+void main()
+{
+	char postfix[10],ch,op1,op2,res;
+	int i=0,val;
+	printf("\nThe operators can be used are '+','-','*','/','^'");
+	printf("\nEnter Postfix expression:");
+	scanf("%s",postfix);
+	ch=postfix[i++];
+	while(ch!='\0')
+	{
+		if((ch>='a'&&ch<='z')||(ch>='A'&&ch<='Z'))
+		{
+			printf("\nEnter value for %c:",ch);
+			scanf("%d",&val);
+			push(val);
+		}
+		else if(isOperator(ch)==1)
+		{
+			op2=pop();
+			op1=pop();
+			res=calc(ch,op1,op2);
+			push(res);
+		}
+	ch=postfix[i++];
+	}
+	printf("\nThe resultant of postfix expression is:%d",pop());
+}
+void push(int ch)
+{
+	if(top==size-1)
+	{
+		printf("\nStack overflow");
+		return;
+	}
+	else
+	{
+		stack[++top]=ch;
+	}
+}
+int calc(char ch,intx,int y)
+{
+	int z;
+	switch(ch)
+	{
+		case '^':z=x^y;return z;break;
+		case '*':z=x*y;return z;break;
+		case '+':z=x+y;return z;break;
+		case '-':z=x-y;return z;break;
+		case '/':z=x/y;return z;break;
+		default:printf("\nNo operation can be performed by given operator");
+	}
+}
+char pop()
+{
+	char p;
+	if(top==-1)
+	{
+		printf("\nStack is Underflow");
+	}
+	else
+	{
+		p=stack[top--];
+		return p;
+	}
+}
+int isOperator(char ch)
+{
+	switch(ch)
+	{
+		case '^':
+		case '+':
+		case '-':
+		case '*':
+		case '/':return 1;break;
+		default:printf("\nThe character %c is not an operator",ch);return 0;
+	}
+}
