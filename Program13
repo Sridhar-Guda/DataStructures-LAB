@@ -1,0 +1,189 @@
+#include<stdio.h>
+#include<stdlib.h>
+void insert();
+void del();
+void display();
+void search();
+struct Node
+{
+	int key,value;
+	struct Node *next;
+}*head=NULL;
+struct Node *create()
+{
+	struct Node *newnode;
+	int k,val;
+	newnode=(struct Node*)malloc(sizeof(struct Node));
+	printf("\nEnter a key:");
+	scanf("%d",&k);
+	printf("\nEnter a value:");
+	scanf("%d",&val);
+	newnode->key=k;
+	newnode->value=val;
+	newnode->next=NULL;
+	return newnode;
+}
+void main()
+{
+	int ch;
+	while(1)
+	{
+		printf("\n1.Insert\n2.Delete\n3.Display\n4.Search\n5.Exit");
+		printf("\nEnter your choice:");
+		scanf("%d",&ch);
+		switch(ch)
+		{
+			case 1:insert();break;
+			case 2:del();break;
+			case 3:display();break;
+			case 4:search();break;
+			case 5:exit(0);
+			default:printf("\nWrong choice");
+		}
+	}
+}
+void insert()
+{
+	struct Node *newnode,*temp1,*temp2;
+	newnode=create();
+	if(head==NULL)
+	{
+		head=newnode;
+	}
+	else
+	{
+		temp1=head;
+		while(temp1->next!=NULL &&newnode->key>temp1->key)
+		{
+			temp2=temp1;
+			temp1=temp1->next;
+			if(temp1->key==newnode->key)
+			{
+				printf("\nKeyduplicacy occurred");
+				return;
+			}
+		}
+		if(temp1==head)
+		{
+			if(head->key==newnode->key)
+			{
+				printf("\nKeyduplicacy occurred");
+				return;
+			}
+			else if(head->key>newnode->key)
+			{
+				newnode->next=head;
+				head=newnode;
+			}
+			else
+			{
+				temp2=head->next;
+				head->next=newnode;
+				newnode->next=temp2;
+			}
+		}
+		else if(temp1->next==NULL && temp1->key<newnode->key)
+		{
+			temp1->next=newnode;
+		}
+		else
+		{
+			newnode->next=temp1;
+			temp2->next=newnode;
+		}
+	}
+}
+void display()
+{
+	struct Node *temp;
+	if(head==NULL)
+	{
+		printf("\nNo elements in Dictionary...");
+	}
+	else
+	{
+		temp=head;
+		while(temp!=NULL)
+		{
+			printf("[%d]->[%d]\t",temp->key,temp->value);
+			temp=temp->next;
+		}
+	}
+}
+void del()
+{
+	struct Node *temp1,*temp2;
+	int k;
+	if(head==NULL)
+	{
+		printf("\nDictionary empty..");
+		return;
+	}
+	else
+	{
+		printf("\nEnter the key for which node you want to delete:");
+		scanf("%d",&k);
+		temp1=head;
+		while(temp1->next!=NULL && k!=temp1->key)
+		{
+			temp2=temp1;
+			temp1=temp1->next;
+		}
+		if(temp1==head)
+		{
+			printf("\nThe deleted element is [%d]->[%d]",temp1->key,temp1->value);
+			head=head->next;
+			free(temp1);
+		}
+		else if(temp1->next==NULL)
+		{
+			if(temp1->key==k)
+			{
+				printf("\nThe deleted element is [%d]->[%d]",temp1->key,temp1->value);
+				temp2->next=NULL;
+				free(temp1);
+				return;
+			}
+			else
+			{
+				printf("\nNo element found with given key..");
+				return;
+			}
+		}
+		else
+		{
+			temp2->next=temp1->next;
+			printf("\nThe deleted element is [%d]->[%d]",temp1->key,temp1->value);
+			free(temp1);
+		}
+	}
+}
+void search()
+{
+	struct Node *temp;
+	int k;
+	if(head==NULL)
+	{
+		printf("\nUnable to search element,Dictionary is empty");
+		return;
+	}
+	else
+	{
+		printf("\nEnter the key for searching:");
+		scanf("%d",&k);
+		temp=head;
+		while(temp->key!=k && temp->next!=NULL)
+		{
+			temp=temp->next;
+		}
+		if(temp->key==k)
+		{
+			printf("\nElement is found and its value is [%d]->[%d]",temp->key,temp->value);
+			return;
+		}
+		else
+		{
+			printf("\nNo element found with the given key");
+		}
+	}
+}
