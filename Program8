@@ -1,0 +1,300 @@
+#include<stdio.h>
+#include<stdlib.h>
+struct Node
+{
+	int data;
+	struct Node *lchild,*rchild;
+}*root=NULL;
+void insert(struct Node *,struct Node *);
+void search(struct Node *,int);
+void inorder(struct Node *);
+void preorder(struct Node *);
+void postorder(struct Node *);
+void del(struct Node *,int,struct Node *);
+struct Node *find_suc(struct Node *);
+struct Node *create()
+{
+	struct Node *newnode;
+	int val;
+	newnode=(struct Node*)malloc(sizeof(struct Node));
+	printf("\nEnter a value for node:");
+	scanf("%d",&val);
+	newnode->data=val;
+	newnode->lchild=NULL;
+	newnode->rchild=NULL;
+	return newnode;
+}
+void main()
+{
+	struct Node *newnode;
+	int ch,key;
+	while(1)
+	{
+		printf("\n1.Insert\n2.Search\n3.Inorder Display\n4.Preorder Display\n5.Postorder Display\n6.Delete\n7.Exit");
+		printf("\nEnter your choice:");
+		scanf("%d",&ch);
+		switch(ch)
+		{
+			case 1:newnode=create();
+					if(root==NULL)
+					{
+						root=newnode;
+					}
+					else
+					{
+						insert(root,newnode);
+					}
+					break;
+			case 2:if(root==NULL)
+					{
+						printf("\nUnable to search,Because tree is empty");
+					}
+					else
+					{
+						printf("\nEnter the key to be searched:");
+						scanf("%d",&key);
+						search(root,key);
+					}
+					break;
+			case 3:if(root==NULL)
+					{
+						printf("\nTree is empty,Unable to display");
+					}
+					else
+					{
+						inorder(root);
+					}
+					break;
+			case 4:if(root==NULL)
+					{
+						printf("\nTree is empty,Unable to display");
+					}
+					else
+					{
+						preorder(root);
+					}
+					break;
+			case 5:if(root==NULL)
+					{
+						printf("\nTree is empty,Unable to display");
+					}
+					else
+					{
+						postorder(root);
+					}
+					break;
+			case 6:if(root==NULL)
+					{
+						printf("\nTree is empty,Unable to delete");
+					}
+					else
+					{
+						printf("\nEnter a key to be deleted:");
+						scanf("%d",&key);
+						del(root,key,root);
+					}
+					break;
+			case 7:exit(0);
+			default:printf("\nWrong choice entered");
+		}
+	}
+	return 0;
+}
+void insert(struct Node *temp,struct Node *newnode)
+{
+	if(temp->data==newnode->data)
+	{
+		printf("\nUnable to insert duplicate values in trees");
+		return;
+	}
+	else if(newnode->data<temp->data)
+	{
+		if(temp->lchild==NULL)
+		{
+			temp->lchild=newnode;
+			return;
+		}
+		else
+		{
+			return insert(temp->lchild,newnode);
+		}
+	}
+	else if(newnode->data>temp->data)
+	{
+		if(temp->rchild==NULL)
+		{
+			temp->rchild=newnode;
+			return;
+		}
+		else
+		{
+			return insert(temp->rchild,newnode);
+		}
+	}
+}
+void search(struct Node *temp,int key)
+{
+	if(temp==NULL)
+	{
+		printf("\nElement not found with the given key %d",key);
+		return;
+	}
+	else if(temp->data==key)
+	{
+		printf("\nKey %d is found in the tree",key);
+		return;
+	}
+	else if(key<temp->data)
+	{
+		return search(temp->lchild,key);
+	}
+	else if(key>temp->data)
+	{
+		return search(temp->rchild,key);
+	}
+}
+void inorder(struct Node *temp)
+{
+	if(temp!=NULL)
+	{
+		inorder(temp->lchild);
+		printf("%d\t",temp->data);
+		inorder(temp->rchild);
+	}
+}
+void preorder(struct Node *temp)
+{
+	if(temp!=NULL)
+	{
+		printf("%d\t",temp->data);
+		preorder(temp->lchild);		
+		preorder(temp->rchild);
+	}
+}
+void postorder(struct Node *temp)
+{
+	if(temp!=NULL)
+	{
+		postorder(temp->lchild);	
+		postorder(temp->rchild);
+		printf("%d\t",temp->data);
+	}
+}
+void del(struct Node *temp,intkey,struct Node *parent)
+{
+	struct Node *temp1;
+	if(temp==NULL)
+	{
+		printf("\nUnable to delete,Because Element %d not found in the tree",key);
+		return;
+	}
+	else if(key<temp->data)
+	{
+		return del(temp->lchild,key,temp);
+	}
+	else if(key>temp->data)
+	{
+		return del(temp->rchild,key,temp);
+	}
+	else if(key==temp->data)
+	{
+		//LEAF NODE
+		if(temp->lchild==NULL && temp->rchild==NULL)
+		{
+			if(temp==root)
+			{
+				printf("\nThe given element %d is a root node and a leaf node,Node is deleted and root is NULL",temp->data);
+				free(temp);
+				root=NULL;
+				return;
+			}
+			else if(temp->data<parent->data)
+			{
+				printf("\nThe given element %d is a leaf node,Node is deleted",temp->data);
+				parent->lchild=NULL;
+				free(temp);
+				return;
+			}
+			else
+			{
+				printf("\nThe given element %d is a leaf node,Node is deleted",temp->data);
+				parent->rchild=NULL;
+				free(temp);
+				return;
+			}
+		}
+		//ONE CHILD
+		else if(temp->lchild==NULL || temp->rchild==NULL)
+		{
+			if(temp==root)
+			{
+				printf("\nThe given element %d is a root node and it consists of one child,Node is deleted and tree is rearranged",temp->data);
+				if(temp->lchild!=NULL && temp->rchild==NULL)
+				{
+					root=root->lchild;
+					free(temp);
+					return;
+				}
+				else
+				{
+					root=root->rchild;
+					free(temp);
+					return;
+				}
+			}
+			else if(temp->rchild==NULL)
+			{
+				if(temp->data<parent->data)
+				{
+					parent->lchild=temp->lchild;
+					temp->lchild=NULL;
+					printf("\nThe given element %d has one child,Node is deleted and tree is rearranged",temp->data);
+					free(temp);
+				}
+				else
+				{
+					parent->rchild=temp->lchild;
+					temp->lchild=NULL;
+					printf("\nThe given element %d has one child,Node is deleted and tree is rearranged",temp->data);
+					free(temp);
+				}
+			}
+			else if(temp->lchild==NULL)
+			{
+				if(temp->data<parent->data)
+				{
+					parent->lchild=temp->rchild;
+					temp->rchild=NULL;
+					printf("\nThe given element %d has one child,Node is deleted and tree is rearranged",temp->data);
+					free(temp);
+				}
+				else
+				{
+					parent->rchild=temp->rchild;
+					temp->rchild=NULL;
+					printf("\nThe given element %d has one child,Node is deleted and tree is rearranged",temp->data);
+					free(temp);
+				}	
+			}
+		}
+		//TWO CHILDREN
+		else if(temp->rchild!=NULL && temp->lchild!=NULL)
+		{
+			temp1=find_suc(temp->rchild);
+			printf("\nThe given element %d has two children,Node is replaced with the inordersucessor element %d,thesucessor is to be deleted",temp->data,temp1->data);
+			temp->data=temp1->data;
+			del(temp->rchild,temp1->data,temp);
+		}
+	}
+}
+struct Node *find_suc(struct Node *temp)
+{
+	if(temp->lchild!=NULL)
+	{
+		return find_suc(temp->lchild);
+	}
+	else
+	{
+		return temp;
+	}
+}
