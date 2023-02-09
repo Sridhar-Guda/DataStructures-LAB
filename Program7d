@@ -1,0 +1,51 @@
+#include<stdio.h>
+int Binary_Search(int [],int,int,int);
+void main()
+{
+	int a[25],low,high,n,key,i,x;
+	printf("\nEnter the size of an array:");
+	scanf("%d",&n);
+	printf("\nEnter the sorted array of %d elements:\n",n);
+	for(i=0;i<n;i++)
+	{
+		scanf("%d",&a[i]);
+	}
+	printf("\nEnter the key to be searched:");
+	scanf("%d",&key);
+	low=0;
+	high=n-1;
+	x=Binary_Search(a,low,high,key);
+	if(x==1)
+	{
+		printf("\nSearch is sucessful");
+	}
+	else
+	{
+		printf("\nKey not found");
+	}
+}
+int Binary_Search(int a[],int low,inthigh,int key)
+{
+	int mid;
+	if(low<=high)
+	{
+		mid=(low+high)/2;
+		if(a[mid]==key)
+		{
+			printf("\nKey found at position %d",mid+1);
+			return 1;
+		}
+		else if(key<a[mid])
+		{
+			return Binary_Search(a,low,mid-1,key);
+		}
+		else if(key>a[mid])
+		{
+			return Binary_Search(a,mid+1,high,key);
+		}
+	}
+	else
+	{
+		return -1;
+	}
+}
