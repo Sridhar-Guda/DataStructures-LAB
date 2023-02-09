@@ -1,0 +1,82 @@
+#include<stdio.h>
+#include<stdlib.h>
+#define size 5
+int Queue[size],front=-1,rear=-1;
+void enqueue();
+void dequeue();
+void display();
+void main()
+{
+	int ch;
+	while(1)
+	{
+		printf("\n1.Enqueue\n2.Dequeue\n3.Display\n4.Exit");
+		printf("\nEnter your choice:");
+		scanf("%d",&ch);
+		switch(ch)
+		{
+			case 1:enqueue();break;
+			case 2:dequeue();break;
+			case 3:display();break;
+			case 4:exit(0);
+			default:printf("\nWrong choice");
+		}
+	}
+}
+void enqueue()
+{
+	int i;
+	if(rear==size-1)
+	{
+		printf("\nQueue is Full");
+		return;
+	}
+	else
+	{
+		printf("\nEnter a value:");
+		scanf("%d",&i);
+		if(rear==-1&&front==-1)
+		{
+			
+			Queue[++rear]=i;
+			front++;
+		}
+		else
+		{
+			Queue[++rear]=i;
+		}
+	}
+}
+void dequeue()
+{
+	if(front==-1&&rear==-1)
+	{
+		printf("\nQueue Empty Unable to perform delete option");
+		return;
+	}
+	else if(rear==front)
+	{
+		printf("\n The deleted element is :%d",Queue[front]);
+		front=-1;
+		rear=-1;
+	}
+	else
+	{
+		printf("\n The deleted element is :%d",Queue[front++]);
+	}
+}
+void display()
+{
+	int i;
+	if(rear==-1&&front==-1)
+	{
+		printf("\nNo elements to display");
+	}
+	else
+	{
+		for(i=front;i<=rear;i++)
+		{
+			printf("%d\t",Queue[i]);
+		}
+	}
+}
