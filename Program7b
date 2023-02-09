@@ -1,0 +1,39 @@
+#include<stdio.h>
+int Lin_Search(int [],int,int);
+void main()
+{
+	int a[20],key,n,i,x;
+	printf("\nEnter the size of an array:");
+	scanf("%d",&n);
+	printf("\nEnter %d elements:\n",n);
+	for(i=0;i<n;i++)
+	{
+		scanf("%d",&a[i]);
+	}
+	printf("\nEnter the key to be searched:");
+	scanf("%d",&key);
+	x=Lin_Search(a,n-1,key);
+	if(x==1)
+	{
+		printf("\nSearch is sucessful");
+	}
+	else
+	{
+		printf("\nKey not found");
+	}
+}
+int Lin_Search(int a[],int n,int key)
+{
+	if(n>=0)
+	{
+		if(a[n]==key)
+		{
+			printf("\nKey found at %d location",n+1);
+			return 1;
+		}
+		else
+		{
+			return Lin_Search(a,n-1,key);
+		}
+	}
+}
